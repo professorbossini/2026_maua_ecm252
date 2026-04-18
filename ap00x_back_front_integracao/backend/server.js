@@ -5,7 +5,6 @@ const app = express()
 //middleware
 app.use(express.json())
 
-console.log(process.env)
 let conexao
 
 const conectar = async () => {
@@ -49,7 +48,44 @@ app.post('/tarefas', async function(req, res){
   }
 })
 
-//fazer a rota para atualizar e a rota para remover
+//fazer o put, ele atualiza um lembrete
+///tarefas/12345
+app.put('/tarefas/:id', async (req,  res) => {
+  try {
+    const { id } = req.params
+    const { titulo, descricao } = req.body
+    const sql = 'UPDATE tb_tarefa SET titulo = ?, descricao = ? WHERE cod_tarefa = ?'; 
+    await conexao.query(
+      sql,
+      [titulo, descricao, id]
+    )
+    res.json({id, titulo, descricao})
+  }
+  catch (error) {
+    console.log('Atualizando: ' + erro)
+    res.status(500).json({erro: 'Erro ao atualizar a tarefa'})
+  }
+})
+
+//fazer a rota para remover
+app.delete('/tarefas/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    await conexao.query(
+      'DELETE FROM tb_tarefa WHERE cod_tarefa = ?',
+      [id]
+    )
+    res.json({
+      mensagem: 'Tarefa excluída'
+    })  
+  } 
+  catch (error) {
+    console.log(error)
+    res.status(500).json({
+      erro: 'Erro ao excluir a tarefa'
+    })
+  }
+})
 
 //obter a lista de tarefas (select)
 app.get('/tarefas', async (req, res) => {
