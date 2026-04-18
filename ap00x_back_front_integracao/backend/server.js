@@ -1,19 +1,21 @@
+require('dotenv').config()
 const express = require('express')
 const mysql2 = require('mysql2/promise')
 const app = express()
 //middleware
 app.use(express.json())
 
+console.log(process.env)
 let conexao
 
 const conectar = async () => {
   try{
     conexao = await mysql2.createConnection({
-      host: 'maua-ecm252-professorbossini.e.aivencloud.com',
-      user: 'avnadmin',
-      password: 'AVNS_ytPzs1YN-mR9O0FSBxQ',
-      database: 'defaultdb',
-      port: '12956'
+      host: process.env.HOST,
+      user: process.env.USUARIO,
+      password: process.env.PASSWORD,
+      database: process.env.DATABASE,
+      port: process.env.PORT
     })
     console.log('Conectado ao MySQL')
   }
