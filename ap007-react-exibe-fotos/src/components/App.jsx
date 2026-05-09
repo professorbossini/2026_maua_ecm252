@@ -5,21 +5,39 @@ import 'primeicons/primeicons.css'
 import 'primereact/resources/primereact.min.css'
 import 'primereact/resources/themes/bootstrap4-light-blue/theme.css'
 import Busca from './Busca'
-const App = () => {
-  return (
-    <div className='grid justify-content-center m-auto w-9 border-round border-1'>
+import { createClient } from 'pexels'
+export default class App extends React.Component{
 
-      <div className='col-12'>
-        <i className="pi pi-apple"></i>
+  pexelsClient = null
+
+  onBuscaRealizada = (termoDeBusca) => {
+    this.pexelsClient.photos.search({
+      query: termoDeBusca
+    })
+    .then((result => console.log(result)))
+  }
+
+  componentDidMount(){
+    this.pexelsClient = createClient('a91Qyfh2Ud1rdeOGKV8aTR5Aj9UmRvdma6EdyhC9EfKStoAyt7rmDuhV')
+  }
+
+  render(){
+    return (
+      <div className='grid justify-content-center m-auto w-9 border-round border-1'>
+  
+        <div className='col-12'>
+          <i className="pi pi-apple"></i>
+        </div>
+        <div className='col-12'>
+          <h1>Exibir uma lista de...</h1>
+        </div>
+        <div className="col-12">
+          <Busca 
+            dica="Digite algo que deseja ver..."
+            onBuscaRealizada={this.onBuscaRealizada} />
+        </div>
       </div>
-      <div className='col-12'>
-        <h1>Exibir uma lista de...</h1>
-      </div>
-      <div className="col-12">
-        <Busca dica="Digite algo que deseja ver..." />
-      </div>
-    </div>
-  )
+    )
+  }
 }
 
-export default App
